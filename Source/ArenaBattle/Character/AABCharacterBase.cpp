@@ -12,7 +12,7 @@
 #include "Item/ABWeaponItemData.h"
 #include "Item/ABPotionItemData.h"
 #include "Item/ABScrollItemData.h"
-
+//git test Text
 // Sets default values
 AAABCharacterBase::AAABCharacterBase()
 {
