@@ -1,0 +1,2 @@
+PlayerID,Name,HP,MP,ATK,DEF,ATKRange,ATKSpeed,Speed,Gold,Weapon1,Weapon2,Armor
+0,Test1,100,100,10,10,10,10,10,1000,BasicWand,asd,BasicArmor
