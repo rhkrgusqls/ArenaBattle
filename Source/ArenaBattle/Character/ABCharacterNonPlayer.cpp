@@ -4,7 +4,7 @@
 #include "Character/ABCharacterNonPlayer.h"
 #include "Engine/AssetManager.h"
 #include "AI/ABAIController.h"
-#include "Perception/PawnSensingComponent.h"
+
 
 AABCharacterNonPlayer::AABCharacterNonPlayer()
 {
@@ -12,6 +12,9 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 
 	AIControllerClass = AABAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	SensingPlayer = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
+	SensingPlayer->OnSeePawn.AddDynamic(this, &AABCharacterNonPlayer::OnSeePawn);
 }
 
 void AABCharacterNonPlayer::AttackHitCheck(AttackType AttackType)
@@ -49,11 +52,12 @@ void AABCharacterNonPlayer::PostInitializeComponents()
 		FStreamableDelegate::CreateUObject(this, &AABCharacterNonPlayer::NPCMeshLoadCompleted));
 }
 
+
 void AABCharacterNonPlayer::NPCMeshLoadCompleted()
 {
 	if (NPCMeshesHandle.IsValid())
 	{
-		USkeletalMesh* NPCMesh = Cast<USkeletalMesh> (NPCMeshesHandle->GetLoadedAsset());
+		USkeletalMesh* NPCMesh = Cast<USkeletalMesh>(NPCMeshesHandle->GetLoadedAsset());
 		if (NPCMesh)
 		{
 			GetMesh()->SetSkeletalMesh(NPCMesh);
@@ -62,4 +66,13 @@ void AABCharacterNonPlayer::NPCMeshLoadCompleted()
 	}
 
 	NPCMeshesHandle->ReleaseHandle();
+}
+
+void AABCharacterNonPlayer::OnSeePawn(APawn* SeenPawn)
+{
+	if (SeenPawn)
+	{
+		FVector SeenPawnLocation = SeenPawn->GetActorLocation();
+	}
+
 }
