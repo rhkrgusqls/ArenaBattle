@@ -14,7 +14,7 @@
 #include "Item/ABScrollItemData.h"
 //git test Text2
 // Sets default values
-//ok
+//ok2
 AAABCharacterBase::AAABCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
