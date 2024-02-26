@@ -13,7 +13,7 @@
 #include "Components/SphereComponent.h"
 #include "Engine/DamageEvents.h"
 #include "Item/ABWeaponItemData.h"
-
+//ok
 AAABCharacterPlayer::AAABCharacterPlayer()
 {
 	//Camera Boom
