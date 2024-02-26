@@ -19,6 +19,7 @@ public:
 
 	void RunAI();
 	void StopAI();
+	void Seenplayer(APawn* SeenPawn);
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
@@ -30,4 +31,6 @@ private:
 	UPROPERTY()
 	TObjectPtr<class UBehaviorTree> BTAsset;
 	
+	UPROPERTY()
+	APawn* TargetPawn;
 };

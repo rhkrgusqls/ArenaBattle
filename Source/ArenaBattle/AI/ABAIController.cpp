@@ -49,3 +49,17 @@ void AABAIController::OnPossess(APawn* InPawn)
 
 	RunAI();
 }
+
+void AABAIController::Seenplayer(APawn* SeenPawn)
+{
+	UE_LOG(LogTemp, Warning, TEXT("See"));
+	UBlackboardComponent* BlackBoardPtr = Blackboard.Get();
+	if (UseBlackboard(BBAsset, BlackBoardPtr))
+	{
+		Blackboard->SetValueAsBool(TEXT("IsCastPlayer"),true);
+		Blackboard->SetValueAsObject(TEXT("Target"), SeenPawn);
+		bool RunResult = RunBehaviorTree(BTAsset);
+		ensure(RunResult);
+		TargetPawn = SeenPawn;
+	}
+}

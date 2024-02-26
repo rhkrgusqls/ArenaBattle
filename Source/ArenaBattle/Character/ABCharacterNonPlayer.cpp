@@ -80,13 +80,16 @@ void AABCharacterNonPlayer::NPCMeshLoadCompleted()
 
 void AABCharacterNonPlayer::OnSeePawn(APawn* SeenPawn)
 {
-	
 	if (SeenPawn)
 	{
 		FVector SeenPawnLocation = SeenPawn->GetActorLocation();
-		//FVector PPos = OwnerComp.GetBlackboardComponent()->GetValueAsVector(TEXT("PlayerPos"));
-		//bIsPlayerCast = true;
-		UE_LOG(LogTemp, Warning, TEXT("SeePawn %s"), *(SeenPawn->GetName()));
-	}
+		UE_LOG(LogTemp, Warning, TEXT("NPC %s sees pawn at location %s"), *GetName(), *SeenPawnLocation.ToString());
 
+		AABAIController* AIController = Cast<AABAIController>(GetController());
+		if (AIController)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("NPC %s sending sighting information to AIController"), *GetName());
+			AIController->Seenplayer(SeenPawn);
+		}
+	}
 }
