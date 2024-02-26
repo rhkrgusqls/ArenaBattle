@@ -7,6 +7,7 @@
 #include "Interface/ABAnimationAttackInterface.h"
 #include "Engine/StreamableManager.h"
 #include "Perception/PawnSensingComponent.h"
+#include "AI/ABAIController.h"
 #include "ABCharacterNonPlayer.generated.h"
 
 /**
@@ -48,6 +49,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 	UPawnSensingComponent* SensingPlayer;
+
+	UBlackboardData* BBNPCData;
 
 	TObjectPtr<class AAABCharacterPlayer> SeenPlayer;
 };

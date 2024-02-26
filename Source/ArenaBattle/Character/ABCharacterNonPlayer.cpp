@@ -14,7 +14,14 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	SensingPlayer = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
-	SensingPlayer->OnSeePawn.AddDynamic(this, &AABCharacterNonPlayer::OnSeePawn);
+	//SensingPlayer->OnSeePawn.AddDynamic(this, &AABCharacterNonPlayer::OnSeePawn);
+
+	SensingPlayer->bOnlySensePlayers = true;
+	SensingPlayer->bSeePawns = true;
+	SensingPlayer->SensingInterval = 0.5f;		// Cognize Player per 0.5sec
+	SensingPlayer->SetPeripheralVisionAngle(45.0f);
+
+	//BBNPCData = AIControllerClass->
 }
 
 void AABCharacterNonPlayer::AttackHitCheck(AttackType AttackType)
@@ -50,6 +57,9 @@ void AABCharacterNonPlayer::PostInitializeComponents()
 	int32 RandIndex = FMath::RandRange(0, NPCMeshes.Num() - 1);
 	NPCMeshesHandle = UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(NPCMeshes[RandIndex],
 		FStreamableDelegate::CreateUObject(this, &AABCharacterNonPlayer::NPCMeshLoadCompleted));
+
+	SensingPlayer->OnSeePawn.AddDynamic(this, &AABCharacterNonPlayer::OnSeePawn);
+
 }
 
 
@@ -70,9 +80,13 @@ void AABCharacterNonPlayer::NPCMeshLoadCompleted()
 
 void AABCharacterNonPlayer::OnSeePawn(APawn* SeenPawn)
 {
+	
 	if (SeenPawn)
 	{
 		FVector SeenPawnLocation = SeenPawn->GetActorLocation();
+		//FVector PPos = OwnerComp.GetBlackboardComponent()->GetValueAsVector(TEXT("PlayerPos"));
+		//bIsPlayerCast = true;
+		UE_LOG(LogTemp, Warning, TEXT("SeePawn %s"), *(SeenPawn->GetName()));
 	}
 
 }
