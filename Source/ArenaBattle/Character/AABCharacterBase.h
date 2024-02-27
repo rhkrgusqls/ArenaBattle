@@ -49,7 +49,7 @@ public:
 
 protected:
 	virtual void SetCharacterControlData(const class UABCharacterControllDataAsset* CharacterControlData);
-	void ProcessComboCommand();
+	virtual void ProcessComboCommand();
 
 	void ComboActionBegin();
 	void ComboActionEnd(UAnimMontage* TargetMontage, bool bInterrupted);

@@ -3,6 +3,7 @@
 
 #include "AI/IsAttackSet.h"
 #include "AIController.h"
+#include "Character/ABCharacterNonPlayer.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UIsAttackSet::UIsAttackSet()
@@ -19,20 +20,15 @@ EBTNodeResult::Type UIsAttackSet::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	{
 		return EBTNodeResult::Failed;
 	}
-
-	FVector TargetPos;
-	APawn* TargetPawn = Cast<APawn>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
-	SetTargetPawn = TargetPawn;
-	if (nullptr != SetTargetPawn)
+	AABCharacterNonPlayer* AttackingPawn = Cast<AABCharacterNonPlayer>(ControllingPawn);
+	if (nullptr != ControllingPawn)
 	{
-        if (false/**/)
-        {
-            // Distance is less than or equal to 100, perform attack
-			UE_LOG(LogTemp, Warning, TEXT("IsAttack"));
-            return EBTNodeResult::Succeeded;
-        }
-
-        return EBTNodeResult::Failed;
+		AttackingPawn->ProcessComboCommand();
+		return EBTNodeResult::Succeeded;
+	}
+	else 
+	{
+		return EBTNodeResult::Failed;
 	}
 
 	return EBTNodeResult::Failed;

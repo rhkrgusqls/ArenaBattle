@@ -28,6 +28,12 @@ void AABCharacterNonPlayer::AttackHitCheck(AttackType AttackType)
 {
 }
 
+void AABCharacterNonPlayer::ProcessComboCommand()
+{
+	Super::AAABCharacterBase::ProcessComboCommand();
+
+}
+
 float AABCharacterNonPlayer::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
