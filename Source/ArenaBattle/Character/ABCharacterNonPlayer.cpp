@@ -4,6 +4,9 @@
 #include "Character/ABCharacterNonPlayer.h"
 #include "Engine/AssetManager.h"
 #include "AI/ABAIController.h"
+#include "ABComboAttackDataAsset.h"
+#include "Components/SensingPawn.h"
+#include "Perception/AIPerceptionComponent.h"
 
 
 AABCharacterNonPlayer::AABCharacterNonPlayer()
@@ -13,13 +16,30 @@ AABCharacterNonPlayer::AABCharacterNonPlayer()
 	AIControllerClass = AABAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
-	SensingPlayer = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
+	SensingPlayer = CreateDefaultSubobject<USensingPawn>(TEXT("PawnSensingComponent"));
 	//SensingPlayer->OnSeePawn.AddDynamic(this, &AABCharacterNonPlayer::OnSeePawn);
 
 	SensingPlayer->bOnlySensePlayers = true;
 	SensingPlayer->bSeePawns = true;
-	SensingPlayer->SensingInterval = 0.5f;		// Cognize Player per 0.5sec
+	SensingPlayer->SensingInterval = 0.1f;
 	SensingPlayer->SetPeripheralVisionAngle(45.0f);
+
+	static ConstructorHelpers::FObjectFinder<UABComboAttackDataAsset> ComboActionDataRef(TEXT("/Game/ArenaBattle/Animation/DA_ComboAttack.DA_ComboAttack"));
+	if (ComboActionDataRef.Object)
+	{
+		ComboAttackData = ComboActionDataRef.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ComboActionMontageRef(TEXT("/Game/ArenaBattle/Animation/AM_Character.AM_Character"));
+	if (ComboActionMontageRef.Object)
+	{
+		ComboActionMontage = ComboActionMontageRef.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/Game/ArenaBattle/Animation/AM_Dead.AM_Dead"));
+	if (DeadMontageRef.Object)
+	{ 
+		DeadMontage = DeadMontageRef.Object;
+	}
 
 	//BBNPCData = AIControllerClass->
 }
@@ -31,6 +51,13 @@ void AABCharacterNonPlayer::AttackHitCheck(AttackType AttackType)
 void AABCharacterNonPlayer::ProcessComboCommand()
 {
 	Super::AAABCharacterBase::ProcessComboCommand();
+
+}
+
+void AABCharacterNonPlayer::Tick(float deltasec)
+{
+	Super::Tick(deltasec);
+	TArray<AActor*> PerceivedActors;
 
 }
 
@@ -95,6 +122,15 @@ void AABCharacterNonPlayer::OnSeePawn(APawn* SeenPawn)
 		if (AIController)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("NPC %s sending sighting information to AIController"), *GetName());
+			AIController->Seenplayer(SeenPawn);
+		}
+	}
+	else
+	{
+		AABAIController* AIController = Cast<AABAIController>(GetController());
+		if (AIController)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Null"));
 			AIController->Seenplayer(SeenPawn);
 		}
 	}

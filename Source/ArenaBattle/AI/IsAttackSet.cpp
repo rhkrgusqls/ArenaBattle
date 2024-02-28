@@ -14,6 +14,7 @@ EBTNodeResult::Type UIsAttackSet::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 {
 
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
+	UE_LOG(LogTemp, Warning, TEXT("AttackSet"));
 
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (nullptr == ControllingPawn)
@@ -23,6 +24,16 @@ EBTNodeResult::Type UIsAttackSet::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	AABCharacterNonPlayer* AttackingPawn = Cast<AABCharacterNonPlayer>(ControllingPawn);
 	if (nullptr != ControllingPawn)
 	{
+		APawn* TargetPawn = Cast<APawn>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
+		if (TargetPawn)
+		{
+			FVector LookAtDirection = TargetPawn->GetActorLocation() - AttackingPawn->GetActorLocation();
+			LookAtDirection.Z = 0.0f; // Ignore vertical component
+			LookAtDirection.Normalize();
+
+			FRotator NewRotation = FRotationMatrix::MakeFromX(LookAtDirection).Rotator();
+			AttackingPawn->SetActorRotation(FMath::RInterpTo(AttackingPawn->GetActorRotation(), NewRotation, GetWorld()->GetDeltaSeconds(), 5.0f));
+		}
 		AttackingPawn->ProcessComboCommand();
 		return EBTNodeResult::Succeeded;
 	}

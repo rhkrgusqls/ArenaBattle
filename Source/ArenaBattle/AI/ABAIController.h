@@ -20,6 +20,7 @@ public:
 	void RunAI();
 	void StopAI();
 	void Seenplayer(APawn* SeenPawn);
+	void RestartAI();
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
